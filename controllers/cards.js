@@ -15,9 +15,9 @@ const createCard = (req, res) => {
     })
     .catch((error) => {
       if (error.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Ошибка 400' });
+        res.status(400).send({ message: 'Ошибка 400' });
       } else {
-        return res.status(500).send({ message: 'Ошибка 500' });
+        res.status(500).send({ message: 'Ошибка 500' });
       }
     });
 };
@@ -29,7 +29,7 @@ const deleteCard = (req, res) => {
       throw new Error('Карточка не найдена');
     })
     .then((card) => res.send(card))
-    .catch((evt) => {
+    .catch(() => {
       res.status(500).send({ message: 'Ошибка' });
     });
 };
@@ -44,7 +44,7 @@ const likeCard = (req, res) => {
       throw new Error('Карточка не найдена');
     })
     .then((card) => res.status(200).send(card))
-    .catch((evt) => {
+    .catch(() => {
       res.status(500).send({ message: 'Ошибка' });
     });
 };
@@ -59,9 +59,11 @@ const dislikeCard = (req, res) => {
       throw new Error('Карточка не найдена');
     })
     .then((card) => res.status(200).send(card))
-    .catch((evt) => {
+    .catch(() => {
       res.status(500).send({ message: 'Ошибка' });
     });
 };
 
-module.exports = { getCards, createCard, deleteCard, likeCard, dislikeCard };
+module.exports = {
+  getCards, createCard, deleteCard, likeCard, dislikeCard,
+};

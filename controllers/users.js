@@ -5,7 +5,7 @@ const getUsers = (req, res) => {
     .then((users) => {
       res.send({ users });
     })
-    .catch((evt) => {
+    .catch(() => {
       res.status(500).send({ message: 'Ошибка' });
       console.log('Ошибка поиска пользователей');
     });
@@ -61,7 +61,6 @@ const updateUser = (req, res) => {
         res.status(400).send({
           message: 'Пользователь c указанным id не найден.',
         });
-        return;
       }
     })
     .catch((err) => {
@@ -99,4 +98,6 @@ const updateAvatar = (req, res) => {
     });
 };
 
-module.exports = { getUsers, getUser, createUser, updateUser, updateAvatar };
+module.exports = {
+  getUsers, getUser, createUser, updateUser, updateAvatar,
+};
