@@ -2,32 +2,32 @@ const User = require('../models/users');
 
 const getUsers = (req, res) => {
   User.find({})
-  .then((users) => {
-    res.send({users})
-  })
-  .catch((evt) => {
-    res.status(500).send({ message: 'Ошибка' })
-    console.log('Ошибка поиска пользователей');
-  })
+    .then((users) => {
+      res.send({ users });
+    })
+    .catch((evt) => {
+      res.status(500).send({ message: 'Ошибка' });
+      console.log('Ошибка поиска пользователей');
+    });
 };
 
 const getUser = (req, res) => {
   const { userId } = req.params;
 
   User.findById(userId)
-  .orFail(() => {
-    throw new Error('Пользователь не найден')
-  })
-  .then((user) => {
-    res.send({ data: user})
-  })
-  .catch((e) => {
-    if(e.message === 'Пользователь не найден') {
-      res.status(400).send({message: 'Пользователь не найден' })
-    } else {
-      res.status(500).send({ message: 'Ошибка' })
-    }
-  })
+    .orFail(() => {
+      throw new Error('Пользователь не найден');
+    })
+    .then((user) => {
+      res.send({ data: user });
+    })
+    .catch((e) => {
+      if (e.message === 'Пользователь не найден') {
+        res.status(400).send({ message: 'Пользователь не найден' });
+      } else {
+        res.status(500).send({ message: 'Ошибка' });
+      }
+    });
 };
 
 const createUser = (req, res) => {
@@ -82,21 +82,21 @@ const updateAvatar = (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true}
+    { new: true },
   )
-  .then((user) => {
-    res.status(200).send(user);
-  })
-  .catch((evt) => {
-    if( evt.name === 'ValidationError') {
-      const message = Object.values(evt.errors)
-      .map((error) => error.message)
-      .join("; ");
-      res.status(400).send({ message })
-    } else {
-      res.status(500).send({ message: 'Ошибка' })
-    }
-  })
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch((evt) => {
+      if (evt.name === 'ValidationError') {
+        const message = Object.values(evt.errors)
+          .map((error) => error.message)
+          .join('; ');
+        res.status(400).send({ message });
+      } else {
+        res.status(500).send({ message: 'Ошибка' });
+      }
+    });
 };
 
 module.exports = { getUsers, getUser, createUser, updateUser, updateAvatar };
