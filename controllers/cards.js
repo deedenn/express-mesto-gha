@@ -7,9 +7,7 @@ const getCards = (req, res) => {
       res.send(cards);
     })
     .catch(() => {
-      res
-        .status(ERROR_404)
-        .send({ message: 'Произошла ошибка в работе сервера' });
+      res.status(ERROR_500).send({ message: 'Произошла ошибка в работе сервера' });
     });
 };
 
