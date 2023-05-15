@@ -1,9 +1,16 @@
 const Card = require('../models/cards');
+const { ERROR_400, ERROR_404, ERROR_500 } = require('../utils/constants');
 
 const getCards = (req, res) => {
-  Card.find({}).then((cards) => {
-    res.send(cards);
-  });
+  Card.find({})
+    .then((cards) => {
+      res.send(cards);
+    })
+    .catch(() => {
+      res
+        .status(ERROR_404)
+        .send({ message: 'Произошла ошибка в работе сервера' });
+    });
 };
 
 const createCard = (req, res) => {
@@ -15,9 +22,9 @@ const createCard = (req, res) => {
     })
     .catch((error) => {
       if (error.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Ошибка 400' });
+        return res.status(ERROR_400).send({ message: 'Ошибка 400' });
       }
-      return res.status(500).send({ message: 'Ошибка 500' });
+      return res.status(ERROR_500).send({ message: 'Ошибка 500' });
     });
 };
 
@@ -27,7 +34,7 @@ const deleteCard = (req, res) => {
   Card.findByIdAndRemove(cardId)
     .then((card) => {
       if (!card) {
-        res.status(404).send({
+        res.status(ERROR_404).send({
           message: 'Карточка с указанным ID не найдена',
         });
       } else {
@@ -36,12 +43,12 @@ const deleteCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({
+        res.status(ERROR_400).send({
           message: 'Введен некорректный ID',
         });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка в работе сервера' });
+      res.status(ERROR_500).send({ message: 'Произошла ошибка в работе сервера' });
     });
 };
 
@@ -55,7 +62,7 @@ const likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(404).send({
+        res.status(ERROR_404).send({
           message: 'Передан несуществующий ID карточки',
         });
       } else {
@@ -64,13 +71,13 @@ const likeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({
+        res.status(ERROR_400).send({
           message: 'Введен некорректный ID',
         });
         return;
       }
       res
-        .status(500)
+        .status(ERROR_500)
         .send({ message: 'Произошла ошибка в работе сервера' });
     });
 };
@@ -86,7 +93,7 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(404).send({
+        res.status(ERROR_404).send({
           message: 'Передан несуществующий ID карточки',
         });
       } else {
@@ -95,12 +102,12 @@ const dislikeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({
+        res.status(ERROR_400).send({
           message: 'Введен некорректный ID',
         });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка в работе сервера' });
+      res.status(ERROR_500).send({ message: 'Произошла ошибка в работе сервера' });
     });
 };
 

@@ -1,4 +1,5 @@
 const User = require('../models/users');
+const { ERROR_400, ERROR_404, ERROR_500 } = require('../utils/constants');
 
 const getUsers = (req, res) => {
   User.find({})
@@ -6,7 +7,7 @@ const getUsers = (req, res) => {
       res.send({ users });
     })
     .catch(() => {
-      res.status(500).send({ message: 'Ошибка' });
+      res.status(ERROR_500).send({ message: 'Ошибка' });
       console.log('Ошибка поиска пользователей');
     });
 };
@@ -17,7 +18,7 @@ const getUser = (req, res) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(404).send({
+        res.status(ERROR_404).send({
           message: 'Пользователь не найден',
         });
       } else {
@@ -26,10 +27,10 @@ const getUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Введен некорректный ID' });
+        res.status(ERROR_400).send({ message: 'Введен некорректный ID' });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка в работе сервера' });
+      res.status(ERROR_500).send({ message: 'Произошла ошибка в работе сервера' });
     });
 };
 
@@ -41,14 +42,12 @@ const createUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({
+        res.status(ERROR_400).send({
           message: 'Переданы некорректные данные при создании пользователя.',
         });
         return;
       }
-      res
-        .status(500)
-        .send({ message: 'Произошла ошибка в работе сервера.' });
+      res.status(ERROR_500).send({ message: 'Произошла ошибка в работе сервера.' });
     });
 };
 
@@ -66,7 +65,7 @@ const updateUser = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        res.status(404).send({
+        res.status(ERROR_404).send({
           message: 'Пользователь c указанным ID не найден',
         });
       } else {
@@ -75,12 +74,12 @@ const updateUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({
+        res.status(ERROR_400).send({
           message: 'Переданы некорректные данные при обновлении профиля.',
         });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка в работе сервера.' });
+      res.status(ERROR_500).send({ message: 'Произошла ошибка в работе сервера.' });
     });
 };
 
@@ -98,7 +97,7 @@ const updateAvatar = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        res.status(404).send({
+        res.status(ERROR_404).send({
           message: 'Пользователь c указанным ID не найден',
         });
       } else {
@@ -107,12 +106,12 @@ const updateAvatar = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({
+        res.status(ERROR_400).send({
           message: 'Переданы некорректные данные при обновлении аватара',
         });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка в работе сервера' });
+      res.status(ERROR_500).send({ message: 'Произошла ошибка в работе сервера' });
     });
 };
 
