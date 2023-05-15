@@ -3,10 +3,11 @@ const User = require('../models/users');
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => {
-      res.send({ data: users });
+      res.send({ users });
     })
     .catch(() => {
-      res.status(500).send({ message: 'Ошибка в работе сервера' });
+      res.status(500).send({ message: 'Ошибка' });
+      console.log('Ошибка поиска пользователей');
     });
 };
 
@@ -17,32 +18,23 @@ const getUser = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(404).send({ message: 'Пользователь по указанному id не найден.' });
+        res.status(404).send({ message: 'Пользователь по указанному ID не найден.' });
         return;
       }
       res.status(500).send({ message: 'Произошла ошибка в работе сервера.' });
     });
 };
 
-const updateUser = (req, res) => {
-  const owner = req.user._id;
-  const { name, about } = req.body;
-
-  User.findByIdAndUpdate(owner, { name, about })
-    .then((user) => {
-      res.send({ data: user });
-
-      if (!user) {
-        res.status(404D).send({
-          message: 'Пользователь c указанным id не найден.',
-        });
-        return;
-      }
+const createUser = (req, res) => {
+  const { name, about, avatar } = req.body;
+  User.create({ name, about, avatar })
+    .then((newUser) => {
+      res.send(newUser);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({
-          message: 'Переданы некорректные данные при обновлении профиля.',
+          message: 'Переданы некорректные данные при создании пользователя.',
         });
         return;
       }
@@ -61,8 +53,8 @@ const updateUser = (req, res) => {
       res.send({ data: user });
 
       if (!user) {
-        res.status(400).send({
-          message: 'Пользователь c указанным id не найден.',
+        res.status(404).send({
+          message: 'Пользователь c указанным ID не найден.',
         });
       }
     })
@@ -73,7 +65,7 @@ const updateUser = (req, res) => {
         });
         return;
       }
-      res.status(500).send({ message: 'Ошибка' });
+      res.status(500).send({ message: 'Произошла ошибка в работе сервера.' });
     });
 };
 
@@ -87,9 +79,8 @@ const updateAvatar = (req, res) => {
 
       if (!user) {
         res.status(404).send({
-          message: 'Пользователь c указанным id не найден.',
+          message: 'Пользователь c указанным ID не найден.',
         });
-        return;
       }
     })
     .catch((err) => {
@@ -99,9 +90,7 @@ const updateAvatar = (req, res) => {
         });
         return;
       }
-      res
-        .status(500)
-        .send({ message: 'Произошла ошибка в работе сервера.' });
+      res.status(500).send({ message: 'Произошла ошибка в работе сервера.' });
     });
 };
 

@@ -15,10 +15,9 @@ const createCard = (req, res) => {
     })
     .catch((error) => {
       if (error.name === 'ValidationError') {
-        res.status(400).send({ message: 'Ошибка 400' });
-      } else {
-        res.status(500).send({ message: 'Ошибка 500' });
+        return res.status(400).send({ message: 'Ошибка 400' });
       }
+      return res.status(500).send({ message: 'Ошибка 500' });
     });
 };
 

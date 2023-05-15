@@ -1,7 +1,7 @@
 {
   "name": "express-mesto-gha",
   "version": "1.0.0",
-  "description": "Проект Mesto бэкенд",
+  "description": "Проект Mesto фронтенд + бэкенд",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,12 +21,10 @@
   "homepage": "https://github.com/deedenn/express-mesto-gha#readme",
   "dependencies": {
     "express": "^4.18.2",
-    "mongoose": "^7.1.1"
+    "mongoose": "^7.1.1",
+    "nodemon": "^2.0.22"
   },
   "devDependencies": {
-    "eslint": "^8.2.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.25.2",
-    "nodemon": "^2.0.22"
+    "eslint-config-airbnb-base": "^15.0.0"
   }
 }
