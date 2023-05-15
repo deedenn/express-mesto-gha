@@ -23,43 +23,84 @@ const createCard = (req, res) => {
 
 const deleteCard = (req, res) => {
   const { cardId } = req.params;
+
   Card.findByIdAndRemove(cardId)
-    .orFail(() => {
-      throw new Error('Карточка не найдена');
+    .then((card) => {
+      if (!card) {
+        res.status(404).send({
+          message: 'Карточка с указанным ID не найдена',
+        });
+      } else {
+        res.send(card);
+      }
     })
-    .then((card) => res.send(card))
-    .catch(() => {
-      res.status(500).send({ message: 'Ошибка' });
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({
+          message: 'Введен некорректный ID',
+        });
+        return;
+      }
+      res.status(500).send({ message: 'Произошла ошибка в работе сервера' });
     });
 };
 
 const likeCard = (req, res) => {
+  const { cardId } = req.params;
+  const owner = req.user._id;
   Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $addToSet: { likes: req.user._id } },
+    cardId,
+    { $addToSet: { likes: owner } },
     { new: true },
   )
-    .orFail(() => {
-      throw new Error('Карточка не найдена');
+    .then((card) => {
+      if (!card) {
+        res.status(404).send({
+          message: 'Передан несуществующий ID карточки',
+        });
+      } else {
+        res.send(card);
+      }
     })
-    .then((card) => res.status(200).send(card))
-    .catch(() => {
-      res.status(500).send({ message: 'Ошибка' });
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({
+          message: 'Введен некорректный ID',
+        });
+        return;
+      }
+      res
+        .status(500)
+        .send({ message: 'Произошла ошибка в работе сервера' });
     });
 };
 
 const dislikeCard = (req, res) => {
+  const { cardId } = req.params;
+  const owner = req.user._id;
+
   Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $pull: { likes: req.user._id } },
+    cardId,
+    { $pull: { likes: owner } },
     { new: true },
   )
-    .orFail(() => {
-      throw new Error('Карточка не найдена');
+    .then((card) => {
+      if (!card) {
+        res.status(404).send({
+          message: 'Передан несуществующий ID карточки',
+        });
+      } else {
+        res.send(card);
+      }
     })
-    .then((card) => res.status(200).send(card))
-    .catch(() => {
-      res.status(500).send({ message: 'Ошибка' });
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({
+          message: 'Введен некорректный ID',
+        });
+        return;
+      }
+      res.status(500).send({ message: 'Произошла ошибка в работе сервера' });
     });
 };
 
