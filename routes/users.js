@@ -1,4 +1,5 @@
 const express = require('express');
+const { getInfoUser } = require('../controllers/users');
 
 const usersRouter = express.Router();
 const {
@@ -6,6 +7,7 @@ const {
 } = require('../controllers/users');
 
 usersRouter.get('/', getUsers);
+usersRouter.get('/me', getInfoUser);
 usersRouter.get('/:userId', getUser);
 usersRouter.post('/', createUser);
 usersRouter.patch('/me', updateUser);
