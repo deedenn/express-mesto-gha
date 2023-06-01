@@ -4,6 +4,7 @@ const User = require('../models/users');
 const BadRequestError = require('../errors/badrequest');
 const NotFoundError = require('../errors/notfound');
 const UnauthorizedError = require('../errors/unautorized');
+const ConflictError = require('../errors/conflict');
 
 const getUsers = (req, res, next) => {
   User.find({})
@@ -54,7 +55,9 @@ const getInfoUser = (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  const { name, about, avatar } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
   User.create({
     name, about, avatar, email, password,
   });
@@ -64,16 +67,22 @@ const createUser = (req, res, next) => {
       name, about, avatar, email, password: hash,
     }))
     .then((newUser) => {
-      res.send(newUser);
+      res.status(200).send(newUser);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        throw new BadRequestError(
-          'Переданы некорректные данные при создании пользователя',
+      if (err.code === 11000) {
+        next(
+          new ConflictError('Пользователь c таким email уже зарегистрирован'),
         );
-        return;
+      } else if (err.name === 'ValidationError') {
+        next(
+          new BadRequestError(
+            'Переданы некорректные данные при создании пользователя',
+          ),
+        );
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 

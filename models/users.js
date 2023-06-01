@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+    validate: {
+      validator: (v) => validator.isURL(v),
+      message: 'Введен неверный адрес',
+    },
   },
   email: {
     type: String,
@@ -32,6 +36,7 @@ const userSchema = new mongoose.Schema({
       required: true,
       select: false,
     },
-  } });
+  },
+});
 
 module.exports = mongoose.model('user', userSchema);
