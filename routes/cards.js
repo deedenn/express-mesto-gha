@@ -1,7 +1,9 @@
 const express = require('express');
 
 const { celebrate } = require('celebrate');
-const { createCardValidation, deleteCardValidation, likeCardValidation, dislikeCardValidation } = require('../utils/validation');
+const {
+  createCardValidation, deleteCardValidation, likeCardValidation, dislikeCardValidation,
+} = require('../utils/validation');
 
 const cardsRouter = express.Router();
 const {
