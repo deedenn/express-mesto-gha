@@ -1,4 +1,5 @@
 const express = require('express');
+const { errors } = require('celebrate');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -29,6 +30,7 @@ app.use('*', (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
 });
 
+app.use(errors());
 app.use(centralError);
 
 app.listen(PORT, () => {
