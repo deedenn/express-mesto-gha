@@ -30,6 +30,13 @@ app.use('*', (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
 });
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: '64610a3c8aafb5a357e830aa',
+  };
+  next();
+});
+
 app.use(errors());
 app.use(centralError);
 
