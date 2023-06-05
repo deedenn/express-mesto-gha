@@ -3,7 +3,7 @@ const centralError = (err, req, res, next) => {
 
   res.status(statusCode).send({
     message:
-      statusCode === 500 ? 'Ошибка в работе сервера.' : message,
+      statusCode === 500 ? 'Ошибка в работе сервера' : message,
   });
   next();
 };
